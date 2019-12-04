@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Javascript + DOM</title>
+
+	<style>
+		body{background-color: lightblue}
+		table{background-color: lightblue}
+		th{background-color: skyblue}
+		tr{background-color: lightblue}
+		.container{background-color: lightblue}
+
+		button{ 
+			background:#ff5a0b; width:140px; height:auto; border-radius:10px; border:0px;  margin-top:0px;
+			border-bottom:5px solid #c84d29; margin-bottom:0px; font-family:OSWALD-BOLD; font-size:30px; color:white;
+			line-height:30px; cursor:pointer; text-align: right;
+			background-image:url(delete.png); background-position:5% 50%;background-repeat:no-repeat;
+			background-size: 25px 25px;
+			}
+ 		button:active{ top:2px; border-bottom:3px solid #c84d29;}
+		button:hover{}
+		 
+		button{position:relative;}
+
+		.from{
+			background:#383636;  width:auto; height:70px; background-image:url(search1.png); 
+			background-position:7px 7px; background-repeat:no-repeat; border-radius:8px; border:0px; color:white; 
+			font-size:25px; font-family:hansen; padding:0 30px;
+ 			line-height:87px; background-position:95% 50%; margin-top:5px;
+ 			}
+ 		
+ 		.tab-2 button
+ 		{
+ 			background:#ff5a0b; width:auto; height:auto; border-radius:10px; border:0px;  margin-top:0px;
+			border-bottom:5px solid #c84d29; margin-bottom:0px; font-family:OSWALD-BOLD; font-size:30px; color:white;
+			line-height:30px; cursor:pointer; text-align: center;
+ 		}
+
+ 		
+ 		td
+ 		{
+ 			 font-family:OSWALD-BOLD; font-size:30px; color:#383636;
+			line-height:30px; cursor:pointer; text-align: left;
+ 		}
+	</style>
+
+</head>
+<body>
+	
+	<div class="tab-2" align="center">
+	
+		<input type="text" name="inputText" id="inputText" class="from wow zoomIn animated" placeholder="Enter Items" style="visibility: visible; animation-name: zoomIn;">
+
+			<button onclick="addHtmlTableRow();" class="booknow wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;"><img src="add.png" width="20px" height="20px"> ADD</button>
+			<button onclick="editHTMLTableSelectedRow();" class="booknow wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;" ><img src="edit.png" width="20px" height="20px"> EDIT</button>
+			<button onclick="clearAllRow();" class="booknow wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">  CLEAR</button>
+		
+	</div>
+	<br><hr>
+	<div class="container" align="center">
+		<h1>To Do List</h1>
+		<div class="tab-1">
+			<table id="table" border="0">
+				<tr>
+					<td>HTML</td>
+					<td><button>Remove</button></td>
+				</tr>
+				<tr>
+					<td>CSS</td>
+					<td><button>Remove</button></td>
+				</tr>
+				<tr>
+					<td>JAVASCRIPT</td>
+					<td><button>Remove</button></td>
+				</tr>
+				<tr>
+					<td>BOOTSTRAPT</td>
+					<td><button>Remove</button></td>
+				</tr>
+				<tr>
+					<td>JQUERY</td>
+					<td><button>Remove</button></td>
+				</tr>
+				<tr>
+					<td>PHP</td>
+					<td><button>Remove</button></td>
+				</tr>
+			</table>
+		</div>
+		
+		
+	</div>
+
+	<script>
+		var rIndex,
+			table = document.getElementById("table");
+
+		// Check the Empty Input
+		function checkEmptyInput()
+		{
+		var isEmpty = false,
+			inputText = document.getElementById("inputText").value;
+
+			if(inputText.trim().length == 0){
+				alert("Please input the data");
+				isEmpty = true
+			}
+			return isEmpty;
+		}
+		// Add Row
+		function addHtmlTableRow()
+		{
+			
+			// get the table by id
+			// create a new row and cells
+			// value from input text
+			// set set value into row cells
+			if(!checkEmptyInput()){
+			var newRow = table.insertRow(table.length),
+				cell = newRow.insertCell(0);
+				cell1= newRow.insertCell(1);
+				inputText = document.getElementById("inputText").value;
+
+				cell.innerHTML = inputText;
+				selectedRowToInput();
+				document.getElementById("inputText").value = "";
+
+				var btn = document.createElement("button")
+		  		btn.appendChild(document.createTextNode("Remove"));
+		  		cell1.appendChild(btn);
+				selectedRowToInput();
+				document.getElementById("inputText").value = "";
+				deleteRows()
+		}
+	}
+		// display selected row data into input text
+		function selectedRowToInput()
+		{
+			
+			for (var i = 0; i < table.rows.length; i++)
+			{
+				table.rows[i].onclick = function()
+				{
+					rIndex = this.rowIndex;
+					document.getElementById("inputText").value = this.cells[0].innerHTML;
+				};
+			}
+		}
+		selectedRowToInput();
+
+		function editHTMLTableSelectedRow()
+		{
+			var inputText = document.getElementById("inputText").value;
+
+			if(!checkEmptyInput()){
+			table.rows[rIndex].cells[0].innerHTML = inputText;
+			document.getElementById("inputText").value = "";
+		}
+	}
+
+		function clearAllRow()
+		{	
+			var tr = table.getElementsByTagName('tr');
+			var rowCount = tr.length;
+			for(var x = rowCount - 0; x > 0; x--){
+				table.deleteRow(tr[x]);
+				document.getElementById("inputText").value = "";
+		}
+
+		// 	var tr = table.getElementsByTagName("tr");
+		// for(var i = 1, il = tr.length; i<=il;) {
+  //   	table.deleteRow(tr[i]);
+		// }
+		
+		}
+
+
+
+		function deleteRows()
+		{
+		for(var i = 0; i < table.rows.length; i++)
+		{
+			table.rows[i].cells[1].onclick = function()
+			{
+			index = this.parentElement.rowIndex;
+			table.deleteRow(index);
+			console.log(index);
+		};
+		}
+		}
+		deleteRows();
+
+		function inputLength(){
+			var input = document.getElementById("inputText");
+		return input.value.length;
+		}
+
+		function addListAfterKeypress(event){
+	  if (inputLength()>0 && event.keyCode===13){
+	  	addHtmlTableRow();
+	  }
+		}
+		var input = document.getElementById("inputText");
+		input.addEventListener("keypress",addListAfterKeypress);
+
+
+	</script>
+
+</body>
+</html>
